@@ -10,7 +10,7 @@ Provides all the necessary REST APIs to manage the web interface.
 
 To clone this repository:
 
-    git clone --recurse-submodules -j8 ssh://git@gitea.girgis.me:32822/tube-recorder/web-middleware.git
+    git clone --recurse-submodules -j8 git@github.com:TubeRecorder/web-middleware.git
 
 To make sure `master` branch is checked out:
 
