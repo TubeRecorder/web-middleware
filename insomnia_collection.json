@@ -1,0 +1,121 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-10-14T02:50:31.406Z",
+  "__export_source": "insomnia.desktop.app:v2021.4.1",
+  "resources": [
+    {
+      "_id": "req_dbb015b3719d499d9e8f0d772710e6e5",
+      "parentId": "fld_db9422c4cd904b708411d531ba69be41",
+      "modified": 1634179657445,
+      "created": 1634179625594,
+      "url": "http://localhost:8081/echo",
+      "name": "echo",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"message\":\"Hi There!\"}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_2895c54b84b44bb9866a4ffb1c190d2c"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1634179625594,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_db9422c4cd904b708411d531ba69be41",
+      "parentId": "wrk_145150899bbc4d7495508ce938aff6b2",
+      "modified": 1634179586660,
+      "created": 1634179586660,
+      "name": "aero-middleware",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1634179586660,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_145150899bbc4d7495508ce938aff6b2",
+      "parentId": null,
+      "modified": 1628611469765,
+      "created": 1628611469765,
+      "name": "Insomnia",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_b7ca9926f86615cfa43c9b96e9a60ef28bb2ad10",
+      "parentId": "wrk_145150899bbc4d7495508ce938aff6b2",
+      "modified": 1628611744468,
+      "created": 1628611469806,
+      "name": "Base Environment",
+      "data": {
+        "account_id ": "new-account"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "account_id "
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1628611469806,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_b7ca9926f86615cfa43c9b96e9a60ef28bb2ad10",
+      "parentId": "wrk_145150899bbc4d7495508ce938aff6b2",
+      "modified": 1628611469810,
+      "created": 1628611469810,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_e3c9ca507c494a4ea9ba005abfbe0266",
+      "parentId": "wrk_145150899bbc4d7495508ce938aff6b2",
+      "modified": 1628611469766,
+      "created": 1628611469766,
+      "fileName": "Insomnia",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "env_aa4789ee08524ae898a235d0d8db916e",
+      "parentId": "env_b7ca9926f86615cfa43c9b96e9a60ef28bb2ad10",
+      "modified": 1628883707544,
+      "created": 1628611775182,
+      "name": "Test Env",
+      "data": {
+        "account_id ": "new-account-1",
+        "account_id2": "new-account-2"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "account_id ",
+          "account_id2"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1628611775182,
+      "_type": "environment"
+    }
+  ]
+}
