@@ -1,11 +1,11 @@
-FROM my-build/rust-builder:latest as builder
+FROM tube-recorder/rust-builder:latest as builder
 
 COPY . .
 
 RUN \
   cargo install --path .
 
-FROM my-build/rust-release:latest
+FROM tube-recorder/rust-release:latest
 
 COPY \
   --from=builder \
