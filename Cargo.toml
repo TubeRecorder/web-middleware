@@ -8,6 +8,22 @@ authors = ["Bassem Girgis <bgirgis@pm.me>"]
 name = "server"
 path = "src/server/main.rs"
 
+[features]
+default = ["with-postgres"]
+
+# sql
+with-postgres = ["sqlx", "sqlx/postgres", "sqlx/uuid", "sqlx/json"]
+#with-mysql = ["sqlx", "sqlx/mysql"]
+#with-mssql = ["sqlx", "sqlx/mssql"]
+#with-sqlite = ["sqlx", "sqlx/sqlite"]
+
+#with-all-sql = [
+#  "with-postgres",
+#  "with-mysql",
+#  #"with-mssql",
+#  "with-sqlite",
+#]
+
 [dependencies]
 # logging
 log = { version = "^0.4", features = [
@@ -37,6 +53,16 @@ tokio = { version = "1", features = [
   "macros",
   "net",
 ] }
+
+# sqlx
+sqlx = { version = "0.5.6", features = [
+  # tokio + rustls
+  "runtime-tokio-rustls",
+  # misc
+  "macros",
+  "chrono",
+  "tls",
+], optional = true }
 
 # other
 chrono = "^0.4"
