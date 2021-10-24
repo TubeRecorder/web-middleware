@@ -14,4 +14,4 @@ COPY \
 
 EXPOSE 50051
 
-CMD ["app", "--stdout-log", "--log-file", "/var/log/app/app.log", "--download-host", "download"]
+CMD ["app", "--stdout-log", "--log-file", "/var/log/app/app.log"]

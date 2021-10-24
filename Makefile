@@ -16,4 +16,7 @@ test:
 
 run:
 	cargo run --bin server -- \
-	--stdout-log
+	--stdout-log \
+	--database-name test\
+  --database-username test_user \
+  --database-password test_pass

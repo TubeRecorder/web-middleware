@@ -13,7 +13,6 @@ use log::info;
 
 // arguments
 use args::Arguments;
-use structopt::StructOpt;
 
 // logger
 use logs::setup_logger;
@@ -44,7 +43,7 @@ mod download;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let args = Box::new(Arguments::from_args());
+    let args = Box::new(Arguments::get());
 
     setup_logger(
         args.debug,
@@ -52,6 +51,8 @@ async fn main() -> std::io::Result<()> {
         args.log_file.clone(),
     )
     .unwrap();
+
+    info!("{:?}", &args);
 
     let addr: String = format!("0.0.0.0:{}", args.service_port)
         .parse()
