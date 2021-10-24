@@ -9,6 +9,8 @@
 
 //! # web-middleware-service
 
+use std::sync::Arc;
+
 use log::info;
 
 // arguments
@@ -23,9 +25,13 @@ use actix_web::{
     HttpServer,
 };
 
-use download::{
-    download_video,
-    index,
+use db::{
+    db_connection,
+    Client,
+};
+use routes::{
+    get_downloads_handler,
+    get_index_handler,
 };
 use state::AppState;
 
@@ -34,12 +40,13 @@ mod download_api;
 
 // general modules
 mod args;
+mod db;
 mod errors;
 mod logs;
 mod state;
 
-// api
-mod download;
+// REST API routes
+mod routes;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -60,14 +67,26 @@ async fn main() -> std::io::Result<()> {
 
     info!("Server listening on {}", addr);
 
+    let client = Arc::new(Client::new(
+        db_connection(
+            args.database_host.clone(),
+            args.database_port,
+            args.database_name.clone(),
+            args.database_username.clone(),
+            args.database_password.clone(),
+        )
+        .await
+        .unwrap(),
+    ));
+
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(AppState {
-                download_host: args.download_host.clone(),
-                download_port: args.download_port,
-            }))
-            .service(index)
-            .service(download_video)
+            .app_data(Data::new(AppState::from(
+                &args,
+                client.clone(),
+            )))
+            .service(get_index_handler)
+            .service(get_downloads_handler)
     })
     .bind(addr)?
     .run()

@@ -5,7 +5,6 @@ use serde::{
 };
 
 use actix_web::{
-    get,
     post,
     web,
     HttpResponse,
@@ -21,11 +20,6 @@ use download_api::{
 
 #[path = "../../proto/download-api.rs"]
 mod download_api;
-
-#[get("/")]
-pub async fn index() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
 
 #[derive(Serialize, Deserialize)]
 pub struct Payload {

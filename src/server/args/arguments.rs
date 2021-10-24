@@ -16,7 +16,7 @@ pub struct Arguments {
 
     /// Service port number
     #[structopt(long, default_value = "8081")]
-    pub service_port: i32,
+    pub service_port: u16,
 
     /// Activate stdout logging
     #[structopt(long)]
@@ -48,7 +48,7 @@ pub struct Arguments {
         env = "DB_PORT",
         default_value = "5432"
     )]
-    pub database_port: i32,
+    pub database_port: u16,
 
     /// Database name
     #[structopt(long, env = "DB_NAME")]
@@ -76,7 +76,7 @@ pub struct Arguments {
         env = "DOWNLOAD_PORT",
         default_value = "50051"
     )]
-    pub download_port: i32,
+    pub download_port: u16,
 }
 
 impl Arguments {
