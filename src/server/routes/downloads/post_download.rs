@@ -8,38 +8,36 @@ use actix_web::{
 
 use crate::errors::Error;
 
-pub struct GetDownloads {
-    payload: Result<Vec<(String, String, i32)>, Error>,
+pub struct PostDownload {
+    payload: Result<(), Error>,
 }
 
-impl GetDownloads {
-    pub fn new(
-        payload: Result<Vec<(String, String, i32)>, Error>
-    ) -> Self {
+impl PostDownload {
+    pub fn new(payload: Result<(), Error>) -> Self {
         Self { payload }
     }
 }
 
-impl Responder for GetDownloads {
+impl Responder for PostDownload {
     fn respond_to(
         self,
         req: &HttpRequest,
     ) -> HttpResponse {
         trace!("request {:?}", req);
 
-        let downloads_list = match self.payload {
-            Ok(x) => x,
+        match self.payload {
+            Ok(_) => {},
             Err(e) => {
                 return HttpResponse::ExpectationFailed()
                     .body(format!("error: {}", e.to_string()));
             },
         };
 
-        let payload = match serde_json::to_string(&downloads_list) {
+        let payload = match serde_json::to_string("success") {
             Ok(x) => x,
             Err(e) => {
                 return HttpResponse::ExpectationFailed()
-                    .body(format!("error: {}", e.to_string()));
+                    .body(format!("error: {}", e.to_string()))
             },
         };
 

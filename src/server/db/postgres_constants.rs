@@ -2,9 +2,9 @@ pub static INSERT_DOWNLOAD: &str = "
 INSERT INTO
   downloads 
   (
+    status,
     link_url,
-    local_path,
-    status
+    local_path
   )
 VALUES
   (

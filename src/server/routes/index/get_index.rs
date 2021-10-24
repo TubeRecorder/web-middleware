@@ -1,4 +1,4 @@
-use log::info;
+use log::trace;
 use serde::Serialize;
 use std::fmt::Debug;
 
@@ -36,9 +36,9 @@ impl GetIndex {
 impl Responder for GetIndex {
     fn respond_to(
         self,
-        _req: &HttpRequest,
+        req: &HttpRequest,
     ) -> HttpResponse {
-        info!("generating index");
+        trace!("request {:?}", req);
 
         let payload = match serde_json::to_string(&self) {
             Ok(x) => x,

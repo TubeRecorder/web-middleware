@@ -32,6 +32,7 @@ use db::{
 use routes::{
     get_downloads_handler,
     get_index_handler,
+    post_downloads_handler,
 };
 use state::AppState;
 
@@ -87,6 +88,7 @@ async fn main() -> std::io::Result<()> {
             )))
             .service(get_index_handler)
             .service(get_downloads_handler)
+            .service(post_downloads_handler)
     })
     .bind(addr)?
     .run()
