@@ -147,4 +147,26 @@ impl Client {
         .collect(),
     )
   }
+
+  pub async fn get_max_download_connections(
+    &self
+  ) -> Result<i32, Error> {
+    trace!("loading downloads list",);
+
+    let rows: Vec<(String, String, i32)> =
+      match sqlx::query_as(SELECT_DOWNLOADS)
+        .fetch_all(&self.pool)
+        .await
+      {
+        Ok(x) => x,
+        Err(e) => {
+          return Err(Error::UnknownError(format!(
+            "unable to load downloads table, error: {}",
+            e,
+          )));
+        },
+      };
+
+    Ok(rows)
+  }
 }

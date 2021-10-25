@@ -41,3 +41,39 @@ SELECT
 FROM
   downloads
 ";
+
+pub static INSERT_CONFIG: &str = "
+INSERT INTO
+  configs 
+  (
+    status,
+    link_url,
+    local_path
+  )
+VALUES
+  (
+    $1,
+    $2,
+    $3
+  );
+";
+
+pub static UPDATE_CONFIG: &str = "
+UPDATE
+  configs
+SET
+  status = $1
+WHERE
+  link_url = $2
+  AND
+  local_path = $3;
+";
+
+pub static SELECT_CONFIG: &str = "
+SELECT
+  link_url,
+  local_path,
+  status
+FROM
+  configs
+";
