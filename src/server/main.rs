@@ -92,6 +92,9 @@ async fn main() -> std::io::Result<()> {
       )))
       // index
       .service(get_index_handler)
+      // configs
+      .service(patch_configs_handler)
+      .service(get_configs_handler)
       // downloads
       .service(post_downloads_handler)
       .service(patch_downloads_handler)

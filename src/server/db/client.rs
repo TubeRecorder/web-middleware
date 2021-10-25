@@ -8,7 +8,8 @@ use sqlx::postgres::PgPool;
 use crate::errors::Error;
 
 use super::{
-  entry::Entry,
+  config_entry::ConfigEntry,
+  download_entry::DownloadEntry,
   postgres_constants::*,
 };
 
@@ -38,14 +39,6 @@ impl Client {
       .await
       .unwrap()
     {
-      Some(x) => {
-        if max_concurrent_downloads != x {
-          self
-            .set_max_download_connections(max_concurrent_downloads)
-            .await
-            .unwrap();
-        }
-      },
       None => {
         self
           .set_max_download_connections_(
@@ -55,6 +48,7 @@ impl Client {
           .await
           .unwrap();
       },
+      _ => {},
     };
 
     match self
@@ -62,20 +56,13 @@ impl Client {
       .await
       .unwrap()
     {
-      Some(x) => {
-        if download_period_mins != x {
-          self
-            .set_download_period_mins(download_period_mins)
-            .await
-            .unwrap();
-        }
-      },
       None => {
         self
           .set_download_period_mins_(download_period_mins, true)
           .await
           .unwrap();
       },
+      _ => {},
     };
 
     Ok(())
@@ -83,7 +70,7 @@ impl Client {
 
   pub async fn insert_download(
     &self,
-    entry: Entry,
+    entry: DownloadEntry,
   ) -> Result<(), Error> {
     debug!("inserting a new entry '{:?}'", entry);
 
@@ -176,7 +163,9 @@ impl Client {
     Ok(())
   }
 
-  pub async fn get_downloads(&self) -> Result<Vec<Entry>, Error> {
+  pub async fn get_downloads(
+    &self
+  ) -> Result<Vec<DownloadEntry>, Error> {
     trace!("loading downloads list");
 
     let rows: Vec<(String, String, String, i32)> =
@@ -197,7 +186,7 @@ impl Client {
       rows
         .iter()
         .map(|x| {
-          Entry {
+          DownloadEntry {
             entry_id: x.0.clone(),
             link_url: x.1.clone(),
             local_path: x.2.clone(),
@@ -394,5 +383,20 @@ impl Client {
     self
       .set_download_period_mins_(value, false)
       .await
+  }
+
+  pub async fn get_configs(&self) -> Result<ConfigEntry, Error> {
+    Ok(ConfigEntry {
+      max_download_connections: self
+        .get_max_download_connections()
+        .await
+        .unwrap()
+        .unwrap(),
+      download_period_mins: self
+        .get_download_period_mins()
+        .await
+        .unwrap()
+        .unwrap(),
+    })
   }
 }

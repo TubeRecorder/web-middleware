@@ -4,11 +4,12 @@ use actix_web::{
   patch,
   post,
   web,
+  HttpRequest,
   Responder,
 };
 
 use crate::{
-  db::Entry,
+  db::DownloadEntry,
   state::AppState,
 };
 
@@ -25,9 +26,9 @@ mod post;
 #[post("/downloads")]
 pub async fn post_downloads_handler(
   data: web::Data<AppState>,
-  req_body: web::Json<Entry>,
+  req: web::Json<DownloadEntry>,
 ) -> impl Responder {
-  let payload = req_body.into_inner();
+  let payload = req.into_inner();
 
   Post::new(
     data
@@ -37,32 +38,49 @@ pub async fn post_downloads_handler(
   )
 }
 
-#[patch("/downloads")]
+#[patch("/downloads/{entry_id}/status/{status}")]
 pub async fn patch_downloads_handler(
   data: web::Data<AppState>,
-  req_body: web::Json<(String, i32)>,
+  req: HttpRequest,
 ) -> impl Responder {
-  let payload = req_body.into_inner();
+  let entry_id: String = req
+    .match_info()
+    .get("entry_id")
+    .unwrap()
+    .parse()
+    .unwrap();
+
+  let status: i32 = req
+    .match_info()
+    .get("status")
+    .unwrap()
+    .parse()
+    .unwrap();
 
   Patch::new(
     data
       .client
-      .update_download_status(payload.0, payload.1)
+      .update_download_status(entry_id, status)
       .await,
   )
 }
 
-#[delete("/downloads")]
+#[delete("/downloads/{entry_id}")]
 pub async fn delete_downloads_handler(
   data: web::Data<AppState>,
-  req_body: web::Json<String>,
+  req: HttpRequest,
 ) -> impl Responder {
-  let payload = req_body.into_inner();
+  let entry_id: String = req
+    .match_info()
+    .get("entry_id")
+    .unwrap()
+    .parse()
+    .unwrap();
 
   Delete::new(
     data
       .client
-      .delete_download(payload)
+      .delete_download(entry_id)
       .await,
   )
 }

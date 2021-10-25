@@ -7,16 +7,16 @@ use actix_web::{
 };
 
 use crate::{
-  db::DownloadEntry,
+  db::ConfigEntry,
   errors::Error,
 };
 
 pub struct Get {
-  payload: Result<Vec<DownloadEntry>, Error>,
+  payload: Result<ConfigEntry, Error>,
 }
 
 impl Get {
-  pub fn new(payload: Result<Vec<DownloadEntry>, Error>) -> Self {
+  pub fn new(payload: Result<ConfigEntry, Error>) -> Self {
     Self { payload }
   }
 }
@@ -28,7 +28,7 @@ impl Responder for Get {
   ) -> HttpResponse {
     trace!("request {:?}", req);
 
-    let downloads_list = match self.payload {
+    let entry = match self.payload {
       Ok(x) => x,
       Err(e) => {
         return HttpResponse::ExpectationFailed()
@@ -36,7 +36,7 @@ impl Responder for Get {
       },
     };
 
-    let payload = match serde_json::to_string(&downloads_list) {
+    let payload = match serde_json::to_string(&entry) {
       Ok(x) => x,
       Err(e) => {
         return HttpResponse::ExpectationFailed()

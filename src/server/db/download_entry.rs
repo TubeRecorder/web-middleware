@@ -5,7 +5,7 @@ use serde::{
 use std::fmt::Debug;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Entry {
+pub struct DownloadEntry {
   pub entry_id: String,
   pub link_url: String,
   pub local_path: String,
