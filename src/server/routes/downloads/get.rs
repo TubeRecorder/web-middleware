@@ -6,21 +6,22 @@ use actix_web::{
   Responder,
 };
 
-use crate::errors::Error;
+use crate::{
+  db::Entry,
+  errors::Error,
+};
 
-pub struct GetDownloads {
-  payload: Result<Vec<(String, String, i32)>, Error>,
+pub struct Get {
+  payload: Result<Vec<Entry>, Error>,
 }
 
-impl GetDownloads {
-  pub fn new(
-    payload: Result<Vec<(String, String, i32)>, Error>
-  ) -> Self {
+impl Get {
+  pub fn new(payload: Result<Vec<Entry>, Error>) -> Self {
     Self { payload }
   }
 }
 
-impl Responder for GetDownloads {
+impl Responder for Get {
   fn respond_to(
     self,
     req: &HttpRequest,

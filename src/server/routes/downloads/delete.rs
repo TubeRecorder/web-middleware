@@ -8,17 +8,17 @@ use actix_web::{
 
 use crate::errors::Error;
 
-pub struct PostDownload {
+pub struct Delete {
   payload: Result<(), Error>,
 }
 
-impl PostDownload {
+impl Delete {
   pub fn new(payload: Result<(), Error>) -> Self {
     Self { payload }
   }
 }
 
-impl Responder for PostDownload {
+impl Responder for Delete {
   fn respond_to(
     self,
     req: &HttpRequest,
@@ -33,6 +33,6 @@ impl Responder for PostDownload {
       },
     };
 
-    HttpResponse::Ok().body("success")
+    HttpResponse::Ok().body("successfully deleted entry")
   }
 }

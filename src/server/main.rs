@@ -29,11 +29,7 @@ use db::{
   db_connection,
   Client,
 };
-use routes::{
-  get_downloads_handler,
-  get_index_handler,
-  post_downloads_handler,
-};
+use routes::*;
 use state::AppState;
 
 #[path = "../proto/download-api.rs"]
@@ -86,9 +82,13 @@ async fn main() -> std::io::Result<()> {
         &args,
         client.clone(),
       )))
+      // index
       .service(get_index_handler)
-      .service(get_downloads_handler)
+      // downloads
       .service(post_downloads_handler)
+      .service(patch_downloads_handler)
+      .service(delete_downloads_handler)
+      .service(get_downloads_handler)
   })
   .bind(addr)?
   .run()

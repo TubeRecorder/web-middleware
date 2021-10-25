@@ -2,15 +2,17 @@ pub static INSERT_DOWNLOAD: &str = "
 INSERT INTO
   downloads 
   (
-    status,
+    entry_id,
     link_url,
-    local_path
+    local_path,
+    status
   )
 VALUES
   (
     $1,
     $2,
-    $3
+    $3,
+    $4
   );
 ";
 
@@ -20,13 +22,19 @@ UPDATE
 SET
   status = $1
 WHERE
-  link_url = $2
-  AND
-  local_path = $3;
+  entry_id = $2;
+";
+
+pub static DELETE_DOWNLOAD: &str = "
+DELETE FROM
+  downloads
+WHERE
+  entry_id = $1;
 ";
 
 pub static SELECT_DOWNLOADS: &str = "
 SELECT
+  entry_id,
   link_url,
   local_path,
   status

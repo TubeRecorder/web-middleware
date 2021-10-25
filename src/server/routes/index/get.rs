@@ -11,7 +11,7 @@ use actix_web::{
 use crate::state::AppState;
 
 #[derive(Debug, Serialize)]
-pub struct GetIndex {
+pub struct Get {
   pub database_type: String,
   pub database_host: String,
   pub database_port: u16,
@@ -20,7 +20,7 @@ pub struct GetIndex {
   pub download_port: u16,
 }
 
-impl GetIndex {
+impl Get {
   pub fn new(app_state: &AppState) -> Self {
     Self {
       database_type: app_state.database_type.clone(),
@@ -33,7 +33,7 @@ impl GetIndex {
   }
 }
 
-impl Responder for GetIndex {
+impl Responder for Get {
   fn respond_to(
     self,
     req: &HttpRequest,
