@@ -77,6 +77,22 @@ pub struct Arguments {
     default_value = "50051"
   )]
   pub download_port: u16,
+
+  /// Maximum concurrent downloads
+  #[structopt(
+    long,
+    env = "MAX_CONCURRENT_DOWNLOADS",
+    default_value = "3"
+  )]
+  pub max_concurrent_downloads: u16,
+
+  /// Download period in mins
+  #[structopt(
+    long,
+    env = "DOWNLOAD_PERIOD_MINS",
+    default_value = "60"
+  )]
+  pub download_period_mins: u16,
 }
 
 impl Arguments {

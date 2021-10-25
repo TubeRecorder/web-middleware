@@ -76,6 +76,14 @@ async fn main() -> std::io::Result<()> {
     .unwrap(),
   ));
 
+  client
+    .check_configs(
+      args.max_concurrent_downloads,
+      args.download_period_mins,
+    )
+    .await
+    .unwrap();
+
   HttpServer::new(move || {
     App::new()
       .app_data(Data::new(AppState::from(

@@ -46,15 +46,13 @@ pub static INSERT_CONFIG: &str = "
 INSERT INTO
   configs 
   (
-    status,
-    link_url,
-    local_path
+    config_value,
+    config_key
   )
 VALUES
   (
     $1,
-    $2,
-    $3
+    $2
   );
 ";
 
@@ -62,18 +60,16 @@ pub static UPDATE_CONFIG: &str = "
 UPDATE
   configs
 SET
-  status = $1
+  config_value = $1
 WHERE
-  link_url = $2
-  AND
-  local_path = $3;
+  config_key = $2;
 ";
 
 pub static SELECT_CONFIG: &str = "
 SELECT
-  link_url,
-  local_path,
-  status
+  config_value
 FROM
   configs
+WHERE
+  config_key = $1;
 ";

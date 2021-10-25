@@ -8,5 +8,11 @@ Dockerfile
 # docs
 *.md
 
+# license
+LICENSE
+
+# insomnia
+*.json
+
 # Rust
 .rustfmt.toml
