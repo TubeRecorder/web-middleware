@@ -20,3 +20,6 @@ run:
 	--database-name test\
   --database-username test_user \
   --database-password test_pass
+
+fmt:
+	/usr/bin/find ./ -type f -name "*.rs" -exec rustfmt {} \;

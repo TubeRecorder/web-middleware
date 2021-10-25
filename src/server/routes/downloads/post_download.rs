@@ -33,14 +33,6 @@ impl Responder for PostDownload {
             },
         };
 
-        let payload = match serde_json::to_string("success") {
-            Ok(x) => x,
-            Err(e) => {
-                return HttpResponse::ExpectationFailed()
-                    .body(format!("error: {}", e.to_string()))
-            },
-        };
-
-        HttpResponse::Ok().body(payload)
+        HttpResponse::Ok().body("success")
     }
 }
