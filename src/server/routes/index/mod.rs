@@ -1,7 +1,7 @@
 use actix_web::{
-    get,
-    web,
-    Responder,
+  get,
+  web,
+  Responder,
 };
 
 use crate::state::AppState;
@@ -12,7 +12,7 @@ mod get_index;
 
 #[get("/")]
 pub async fn get_index_handler(
-    data: web::Data<AppState>
+  data: web::Data<AppState>
 ) -> impl Responder {
-    GetIndex::new(data.get_ref())
+  GetIndex::new(data.get_ref())
 }

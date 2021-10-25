@@ -20,19 +20,19 @@ use args::Arguments;
 use logs::setup_logger;
 
 use actix_web::{
-    web::Data,
-    App,
-    HttpServer,
+  web::Data,
+  App,
+  HttpServer,
 };
 
 use db::{
-    db_connection,
-    Client,
+  db_connection,
+  Client,
 };
 use routes::{
-    get_downloads_handler,
-    get_index_handler,
-    post_downloads_handler,
+  get_downloads_handler,
+  get_index_handler,
+  post_downloads_handler,
 };
 use state::AppState;
 
@@ -51,48 +51,48 @@ mod routes;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let args = Box::new(Arguments::get());
+  let args = Box::new(Arguments::get());
 
-    setup_logger(
-        args.debug,
-        args.stdout_log,
-        args.log_file.clone(),
-    )
+  setup_logger(
+    args.debug,
+    args.stdout_log,
+    args.log_file.clone(),
+  )
+  .unwrap();
+
+  info!("{:?}", &args);
+
+  let addr: String = format!("0.0.0.0:{}", args.service_port)
+    .parse()
     .unwrap();
 
-    info!("{:?}", &args);
+  info!("Server listening on {}", addr);
 
-    let addr: String = format!("0.0.0.0:{}", args.service_port)
-        .parse()
-        .unwrap();
+  let client = Arc::new(Client::new(
+    db_connection(
+      args.database_host.clone(),
+      args.database_port,
+      args.database_name.clone(),
+      args.database_username.clone(),
+      args.database_password.clone(),
+    )
+    .await
+    .unwrap(),
+  ));
 
-    info!("Server listening on {}", addr);
+  HttpServer::new(move || {
+    App::new()
+      .app_data(Data::new(AppState::from(
+        &args,
+        client.clone(),
+      )))
+      .service(get_index_handler)
+      .service(get_downloads_handler)
+      .service(post_downloads_handler)
+  })
+  .bind(addr)?
+  .run()
+  .await?;
 
-    let client = Arc::new(Client::new(
-        db_connection(
-            args.database_host.clone(),
-            args.database_port,
-            args.database_name.clone(),
-            args.database_username.clone(),
-            args.database_password.clone(),
-        )
-        .await
-        .unwrap(),
-    ));
-
-    HttpServer::new(move || {
-        App::new()
-            .app_data(Data::new(AppState::from(
-                &args,
-                client.clone(),
-            )))
-            .service(get_index_handler)
-            .service(get_downloads_handler)
-            .service(post_downloads_handler)
-    })
-    .bind(addr)?
-    .run()
-    .await?;
-
-    Ok(())
+  Ok(())
 }
