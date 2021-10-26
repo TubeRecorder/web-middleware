@@ -17,11 +17,13 @@ use delete::Delete;
 use get::Get;
 use patch::Patch;
 use post::Post;
+use start::Start;
 
 mod delete;
 mod get;
 mod patch;
 mod post;
+mod start;
 
 #[post("/downloads")]
 pub async fn post_downloads_handler(
@@ -90,4 +92,16 @@ pub async fn get_downloads_handler(
   data: web::Data<AppState>
 ) -> impl Responder {
   Get::new(data.client.get_downloads().await)
+}
+
+#[post("/downloads/start")]
+pub async fn start_downloads_handler(
+  data: web::Data<AppState>
+) -> impl Responder {
+  Start::new(
+    data
+      .tx
+      .send(String::from("Requested"))
+      .await,
+  )
 }

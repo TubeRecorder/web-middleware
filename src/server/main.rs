@@ -9,9 +9,10 @@
 
 //! # web-middleware-service
 
+use log::info;
 use std::sync::Arc;
 
-use log::info;
+use tokio::sync::mpsc;
 
 // arguments
 use args::Arguments;
@@ -29,8 +30,10 @@ use db::{
   db_connection,
   Client,
 };
+use download_thread::download_process;
 use routes::*;
 use state::AppState;
+use timer_thread::timer_process;
 
 #[path = "../proto/download-api.rs"]
 mod download_api;
@@ -44,6 +47,10 @@ mod state;
 
 // REST API routes
 mod routes;
+
+// threads
+mod download_thread;
+mod timer_thread;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -84,11 +91,39 @@ async fn main() -> std::io::Result<()> {
     .await
     .unwrap();
 
+  let (tx, mut rx) = mpsc::channel(2);
+  let tx2: mpsc::Sender<String> = tx.clone();
+
+  {
+    let client0 = client.clone();
+    let download_host = args.download_host.clone();
+    let download_port = args.download_port;
+
+    tokio::spawn(async move {
+      download_process(
+        client0,
+        download_host,
+        download_port,
+        &mut rx,
+      )
+      .await;
+    });
+  }
+
+  {
+    let client0 = client.clone();
+
+    tokio::spawn(async move {
+      timer_process(client0, tx2).await;
+    });
+  }
+
   HttpServer::new(move || {
     App::new()
       .app_data(Data::new(AppState::from(
         &args,
         client.clone(),
+        tx.clone(),
       )))
       // index
       .service(get_index_handler)
@@ -100,10 +135,13 @@ async fn main() -> std::io::Result<()> {
       .service(patch_downloads_handler)
       .service(delete_downloads_handler)
       .service(get_downloads_handler)
+      .service(start_downloads_handler)
   })
   .bind(addr)?
   .run()
   .await?;
+
+  info!("Server shutting down");
 
   Ok(())
 }

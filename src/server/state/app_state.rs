@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use tokio::sync::mpsc;
+
 use crate::{
   args::Arguments,
   db::Client,
@@ -17,12 +19,15 @@ pub struct AppState {
   pub download_port: u16,
 
   pub client: Arc<Client>,
+
+  pub tx: mpsc::Sender<String>,
 }
 
 impl AppState {
   pub fn from(
     args: &Arguments,
     client: Arc<Client>,
+    tx: mpsc::Sender<String>,
   ) -> Self {
     let x = Self {
       database_type: args.database_type.clone(),
@@ -34,6 +39,7 @@ impl AppState {
       download_host: args.download_host.clone(),
       download_port: args.download_port,
       client,
+      tx,
     };
 
     x
