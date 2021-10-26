@@ -1,17 +1,22 @@
 FROM tube-recorder/rust-builder:latest as builder
 
-COPY . .
+# copy the application code
+COPY --chown=builder:builder . ./app
 
+# build and install
 RUN \
-  cargo install --path .
+  (cd app; cargo install --path .)
 
 FROM tube-recorder/rust-release:latest
 
+# copy installed application
 COPY \
   --from=builder \
   /usr/local/cargo/bin/server \
   /usr/local/bin/app
 
+# default serice port
 EXPOSE 50051
 
-CMD ["app", "--stdout-log", "--log-file", "/var/log/app/app.log"]
+# default command
+CMD ["app", "--stdout-log", "--log-file", "/home/release/app.log"]

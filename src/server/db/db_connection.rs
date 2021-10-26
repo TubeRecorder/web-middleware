@@ -1,3 +1,5 @@
+use log::info;
+
 use sqlx::postgres::{
   PgConnectOptions,
   PgPool,
@@ -11,6 +13,11 @@ pub async fn db_connection(
   username: String,
   password: String,
 ) -> Result<PgPool, sqlx::Error> {
+  info!(
+    "connecting to postgres://{}:{}@{}:{}/{}",
+    &username, &password, &host, port_number, &database_name
+  );
+
   let options = PgConnectOptions::new()
     .host(host.as_str())
     .port(port_number)
